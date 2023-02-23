@@ -1,7 +1,7 @@
-package com.uthus.alebeer.ui.main
+package com.uthus.alebeer.ui.beer
 
 import androidx.lifecycle.ViewModel
 
-class MainViewModel : ViewModel() {
+class BeerViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }
