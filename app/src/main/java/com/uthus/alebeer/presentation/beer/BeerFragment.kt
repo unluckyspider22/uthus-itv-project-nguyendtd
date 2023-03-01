@@ -6,14 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.uthus.alebeer.data.datasource.AleBeerRemoteDataSource
-import com.uthus.alebeer.data.datasource.AleBeerRemoteDataSourceImpl
-import com.uthus.alebeer.data.repository.AleBeerRepository
-import com.uthus.alebeer.data.repository.AleBeerRepositoryImpl
+import androidx.recyclerview.widget.RecyclerView
+
 import com.uthus.alebeer.databinding.FragmentBeerBinding
-import com.uthus.alebeer.domain.usecase.GetBeersUseCase
-import com.uthus.alebeer.domain.usecase.GetBeersUseCaseImpl
 import com.uthus.alebeer.presentation.adapter.ARG_OBJECT
+import mva2.adapter.MultiViewAdapter
 
 class BeerFragment : Fragment() {
 
@@ -23,11 +20,9 @@ class BeerFragment : Fragment() {
 
     private var _binding: FragmentBeerBinding? = null
     private val binding get() = _binding!!
-    private val aleBeerRemoteDataSource: AleBeerRemoteDataSource = AleBeerRemoteDataSourceImpl()
-    private val repository: AleBeerRepository = AleBeerRepositoryImpl(aleBeerRemoteDataSource = aleBeerRemoteDataSource)
-    private val getBeersUseCase : GetBeersUseCase = GetBeersUseCaseImpl(repository = repository)
-    private var viewModel: BeerViewModel = BeerViewModel(getBeersUseCase)
+    private lateinit var viewModel: BeerViewModel
 
+    private lateinit var adapter : MultiViewAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
