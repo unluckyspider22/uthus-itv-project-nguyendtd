@@ -1,7 +1,7 @@
 package com.uthus.alebeer.data.repository
 
-import com.uthus.alebeer.data.datasource.AleBeerRemoteDataSource
-import com.uthus.alebeer.data.datasource.AleBeerRemoteDataSourceImpl
+import com.uthus.alebeer.data.datasource.remote.AleBeerRemoteDataSource
+import com.uthus.alebeer.data.datasource.remote.AleBeerRemoteDataSourceImpl
 import com.uthus.alebeer.data.model.BeerModel
 import com.uthus.alebeer.util.statemanagement.ResultState
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,6 +16,6 @@ interface AleBeerRepository {
 class AleBeerRepositoryImpl(private val dispatcher: CoroutineDispatcher = Dispatchers.IO)
     : AleBeerRepository {
     private val aleBeerRemoteDataSource : AleBeerRemoteDataSource = AleBeerRemoteDataSourceImpl()
-    override fun getBeers(): Flow<ResultState<List<BeerModel>?>> = aleBeerRemoteDataSource.getBeers().flowOn(dispatcher)
+    override  fun getBeers(): Flow<ResultState<List<BeerModel>?>> = aleBeerRemoteDataSource.getBeers().flowOn(dispatcher)
 
 }

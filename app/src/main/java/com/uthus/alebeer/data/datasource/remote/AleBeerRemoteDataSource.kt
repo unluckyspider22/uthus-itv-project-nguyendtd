@@ -1,6 +1,5 @@
-package com.uthus.alebeer.data.datasource
+package com.uthus.alebeer.data.datasource.remote
 
-import android.util.Log
 import com.uthus.alebeer.data.api.AleBeerApi
 import com.uthus.alebeer.data.model.BeerModel
 import com.uthus.alebeer.data.model.ResponseModel
@@ -14,6 +13,7 @@ interface AleBeerRemoteDataSource {
 }
 private const val TEMP_PAGE = 1
 private const val LIMIT = 20
+
 class AleBeerRemoteDataSourceImpl : AleBeerRemoteDataSource {
     override fun getBeers(): Flow<ResultState<List<BeerModel>?>>
         = flow {

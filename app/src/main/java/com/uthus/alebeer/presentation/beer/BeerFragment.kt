@@ -1,10 +1,12 @@
 package com.uthus.alebeer.presentation.beer
 
 import android.os.Bundle
+import android.transition.Visibility
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.uthus.alebeer.data.model.BeerModel
@@ -12,6 +14,7 @@ import com.uthus.alebeer.data.model.BeerModel
 import com.uthus.alebeer.databinding.FragmentBeerBinding
 import com.uthus.alebeer.presentation.adapter.ARG_OBJECT
 import com.uthus.alebeer.presentation.adapter.binder.BeerBinder
+import com.uthus.alebeer.presentation.adapter.binder.ButtonClickedListener
 import com.uthus.alebeer.util.statemanagement.ResultState
 import mva2.adapter.ListSection
 import mva2.adapter.MultiViewAdapter
@@ -26,7 +29,7 @@ class BeerFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: BeerViewModel
 
-    private lateinit var adapter : MultiViewAdapter
+    private lateinit var adapter: MultiViewAdapter
     private var listSection = ListSection<BeerModel>()
 
     override fun onCreateView(
@@ -53,8 +56,9 @@ class BeerFragment : Fragment() {
 
     private fun setupObserver() {
         viewModel.listBeerModel.observe(viewLifecycleOwner) { resultState ->
-            when(resultState) {
+            when (resultState) {
                 is ResultState.Success -> {
+                    _binding?.progressCircular?.visibility = View.GONE
                     resultState.data?.let {
                         addAdapterSection(it)
                     }
@@ -63,7 +67,7 @@ class BeerFragment : Fragment() {
                     //TODO: Handle error case here
                 }
                 is ResultState.Loading -> {
-
+                    _binding?.progressCircular?.visibility = View.VISIBLE
                 }
             }
         }
@@ -77,7 +81,13 @@ class BeerFragment : Fragment() {
     private fun setupAdapter() {
         adapter = MultiViewAdapter()
         _binding?.rvBeer?.adapter = adapter
-        adapter.registerItemBinders(BeerBinder())
+        adapter.registerItemBinders(BeerBinder(buttonClickedListener = object :
+            ButtonClickedListener {
+            override fun onButtonSaveClick(position: Int) {
+                Toast.makeText(context, "aaaa : $position", Toast.LENGTH_SHORT).show()
+            }
+
+        }))
     }
 
 

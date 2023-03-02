@@ -63,25 +63,26 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_delete"
+        android:id="@+id/btn_left"
         android:layout_width="wrap_content"
         tools:text="Delete"
         android:text="Delete"
+        android:visibility="gone"
         android:background="@color/purple_500"
         android:layout_height="wrap_content"
         android:layout_margin="2pt"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/btn_update"
+        app:layout_constraintEnd_toStartOf="@+id/btn_right"
         app:layout_constraintTop_toTopOf="parent">
 
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_update"
+        android:id="@+id/btn_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Update"
-        android:text="Update"
+        tools:text="Save"
+        android:text="Save"
         android:textColor="@color/white"
         android:background="@color/purple_500"
         android:layout_margin="2pt"
@@ -90,18 +91,20 @@
 
     </androidx.appcompat.widget.AppCompatButton>
 
-    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/et_note"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:hint="This is a note"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:hint="Note here"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
-        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_beer">
 
-    </com.google.android.material.textfield.MaterialAutoCompleteTextView>
+    </androidx.appcompat.widget.AppCompatEditText>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
