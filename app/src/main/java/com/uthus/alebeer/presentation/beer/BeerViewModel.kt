@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.uthus.alebeer.data.model.BeerModel
 import com.uthus.alebeer.domain.usecase.GetBeersUseCase
 import com.uthus.alebeer.domain.usecase.GetBeersUseCaseImpl
-import com.uthus.alebeer.util.network.statemanagement.ResultState
+import com.uthus.alebeer.util.statemanagement.ResultState
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.uthus.alebeer.util.network.statemanagement
+package com.uthus.alebeer.util.statemanagement
 
 
 sealed class ResultState<out T> {
