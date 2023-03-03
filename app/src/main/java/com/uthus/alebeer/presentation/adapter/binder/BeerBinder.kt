@@ -1,6 +1,7 @@
 package com.uthus.alebeer.presentation.adapter.binder
 
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
@@ -15,18 +16,28 @@ class BeerBinder(private val buttonClickedListener: ButtonClickedListener) :
 
     inner class BeerViewHolder(private val binding: BeerItemLayoutBinding) :
         ItemViewHolder<BeerModel>(binding.root) {
-        fun bind(beerModel: BeerModel?, buttonClickedListener: ButtonClickedListener) =
+        val context: Context = binding.root.context
+        fun bind(beerModel: BeerModel, buttonClickedListener: ButtonClickedListener) =
             with(binding) {
                 tvName.text = beerModel?.name
                 tvPrice.text = beerModel?.price
-                Glide.with(binding.root.context).load(beerModel?.image).into(ivBeer)
+                Glide.with(context)
+                    .load(beerModel?.image)
+                    .into(ivBeer)
                 btnRight.setOnClickListener {
-                    buttonClickedListener.onButtonSaveClick(bindingAdapterPosition)
+                    if(!etNote.text.isNullOrEmpty()) {
+                        buttonClickedListener.onButtonSaveClick(
+                            bindingAdapterPosition,
+                            beerModel.also {
+                                it?.note = etNote.text.toString()
+                            })
+                        btnRight.setText(R.string.saving)
+                    }
                 }
             }
     }
 
-    override fun bindViewHolder(holder: BeerViewHolder?, item: BeerModel?) {
+    override fun bindViewHolder(holder: BeerViewHolder, item: BeerModel) {
         holder?.bind(item, buttonClickedListener)
     }
 
@@ -47,5 +58,5 @@ class BeerBinder(private val buttonClickedListener: ButtonClickedListener) :
 }
 
 interface ButtonClickedListener {
-    fun onButtonSaveClick(position: Int)
+    fun onButtonSaveClick(position: Int, beerModel: BeerModel)
 }

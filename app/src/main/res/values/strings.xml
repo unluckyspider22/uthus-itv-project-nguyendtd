@@ -2,5 +2,7 @@
     <string name="app_name">AleBeer</string>
     <string name="beer_tab_name">Beer</string>
     <string name="favorite_tab_name">Favorite</string>
+    <string name="saved">Saved</string>
+    <string name="saving">Saving</string>
 
 </resources>

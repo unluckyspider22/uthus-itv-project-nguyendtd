@@ -11,14 +11,16 @@ data class BeerModel(
     @Json(name = "name")
     val name: String,
     @Json(name = "rating")
-    val rating: Rating,
+    val rating: Rating?,
     @Json(name = "image")
     val image: String,
     @Json(name = "id")
     val id: Long,
     @Json(name = "sale_off_time")
-    val saleOffTime: Long
-) : Parcelable
+    val saleOffTime: Long,
+    var note: String? = null
+) : Parcelable {
+}
 
 @Parcelize
 data class Rating(

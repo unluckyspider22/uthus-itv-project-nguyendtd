@@ -1,17 +1,18 @@
 package com.uthus.alebeer.domain.usecase
 
 import com.uthus.alebeer.data.model.BeerModel
+import com.uthus.alebeer.data.model.ResponseModel
 import com.uthus.alebeer.data.repository.AleBeerRepository
-import com.uthus.alebeer.data.repository.AleBeerRepositoryImpl
 import com.uthus.alebeer.util.statemanagement.ResultState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 interface GetBeersUseCase {
-    fun execute() : Flow<ResultState<List<BeerModel>?>>
+    fun execute(): Flow<ResultState<ResponseModel<List<BeerModel>>>>
 }
 
-class GetBeersUseCaseImpl : GetBeersUseCase {
-    private val repository: AleBeerRepository = AleBeerRepositoryImpl()
-    override fun execute(): Flow<ResultState<List<BeerModel>?>> = repository.getBeers()
+class GetBeersUseCaseImpl(private val repository: AleBeerRepository) : GetBeersUseCase {
+
+    override fun execute(): Flow<ResultState<ResponseModel<List<BeerModel>>>> {
+        return repository.getBeers()
+    }
 }
