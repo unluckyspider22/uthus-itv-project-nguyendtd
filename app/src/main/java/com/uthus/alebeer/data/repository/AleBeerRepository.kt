@@ -20,6 +20,8 @@ interface AleBeerRepository {
     fun getBeers(): Flow<ResultState<ResponseModel<List<BeerModel>>>>
     fun getLocalBeers(): Flow<ResultState<List<BeerEntity>>>
     fun saveFavoriteToLocal(beerEntity: BeerEntity): Flow<ResultState<Long?>>
+    fun deleteFavoriteBeer(id: Long) : Flow<ResultState<Int?>>
+    fun updateFavoriteBeer(note: String ,id: Long) : Flow<ResultState<Int?>>
 }
 
 class AleBeerRepositoryImpl(
@@ -35,12 +37,13 @@ class AleBeerRepositoryImpl(
     override fun getLocalBeers(): Flow<ResultState<List<BeerEntity>>> =
         localDataSource.getAllBeers().flowOn(dispatcher)
 
-
     override fun saveFavoriteToLocal(beerEntity: BeerEntity): Flow<ResultState<Long?>> =
         localDataSource.insertBeer(beerEntity).flowOn(dispatcher)
-//        flow {
-//            val result = localDataSource.insertBeer(beerEntity) ?: InsertResult.DEFAULT.result
-//            emit(ResultState.Success(result))
-//        }.flowOn(dispatcher)
+
+    override fun deleteFavoriteBeer(id: Long): Flow<ResultState<Int?>> =
+        localDataSource.deleteBeer(id).flowOn(dispatcher)
+
+    override fun updateFavoriteBeer(note: String, id: Long): Flow<ResultState<Int?>> =
+        localDataSource.updateBeer(note = note, id = id).flowOn(dispatcher)
 
 }

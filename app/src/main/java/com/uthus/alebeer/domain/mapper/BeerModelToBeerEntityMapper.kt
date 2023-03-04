@@ -16,6 +16,7 @@ class BeerModelToBeerEntityMapperImpl : BeerModelToBeerEntityMapper {
             saleOffTime = from.saleOffTime,
             image = from.image,
             note = from.note ?: "",
+            isSaved = from.isSaved
         )
     }
 

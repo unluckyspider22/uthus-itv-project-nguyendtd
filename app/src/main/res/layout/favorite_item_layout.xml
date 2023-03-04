@@ -13,7 +13,7 @@
         android:layout_margin="2pt"
         app:srcCompat="@drawable/ic_launcher_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></androidx.appcompat.widget.AppCompatImageView>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -25,6 +25,7 @@
     </androidx.constraintlayout.widget.Guideline>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -37,13 +38,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="2pt"
-            android:textColor="@color/black"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/iv_beer"
             app:layout_constraintStart_toEndOf="@+id/iv_beer"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Beer name"></TextView>
+            tools:text="Beer name"/>
 
         <TextView
             android:id="@+id/tv_price"
@@ -56,33 +57,30 @@
             android:textColor="@color/black"
             app:layout_constraintStart_toEndOf="@+id/iv_beer"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
-            tools:text="Beer price">
+            tools:text="Beer price"/>
 
-        </TextView>
     </LinearLayout>
 
-
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_left"
+        android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
-        tools:text="Delete"
-        android:text="Delete"
-        android:visibility="gone"
-        android:background="@color/purple_500"
         android:layout_height="wrap_content"
         android:layout_margin="2pt"
+        android:background="@color/purple_500"
+        android:text = "Delete"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/btn_right"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toStartOf="@+id/btn_update"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
     </androidx.appcompat.widget.AppCompatButton>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_right"
+        android:id="@+id/btn_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Save"
-        android:text="Save"
+        android:text="Update"
         android:textColor="@color/white"
         android:background="@color/purple_500"
         android:layout_margin="2pt"

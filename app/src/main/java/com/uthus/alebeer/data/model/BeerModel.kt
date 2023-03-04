@@ -18,7 +18,8 @@ data class BeerModel(
     val id: Long,
     @Json(name = "sale_off_time")
     val saleOffTime: Long,
-    var note: String? = null
+    var note: String? = null,
+    var isSaved: Boolean = false
 ) : Parcelable {
 }
 

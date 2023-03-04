@@ -4,5 +4,14 @@
     <string name="favorite_tab_name">Favorite</string>
     <string name="saved">Saved</string>
     <string name="saving">Saving</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="deleted">Deleted</string>
+    <string name="update">Update</string>
+    <string name="updated">Updated</string>
+    <string name="note_here">Note Here</string>
+    <string name="error">Error! PLease try again!</string>
+    <string name="can_not_edit">Saved! Can not edit!</string>
+    <string name="please_edit">Please type note!</string>
 
 </resources>

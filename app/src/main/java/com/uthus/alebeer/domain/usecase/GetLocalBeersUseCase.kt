@@ -16,9 +16,9 @@ interface GetLocalBeersUseCase {
 class GetLocalBeersUseCaseImpl(private val repository: AleBeerRepository) : GetLocalBeersUseCase {
     private val mapper: BeerEntityToBeerModelMapper = BeerEntityToBeerModelMapperImpl()
     override fun execute(): Flow<ResultState<List<BeerModel>>> =
-        repository.getLocalBeers().map { it ->
-            it.map {
-                it.map {
+        repository.getLocalBeers().map { resultState ->
+            resultState.map { listBeer ->
+                listBeer.map {
                     mapper.transform(it)
                 }
             }

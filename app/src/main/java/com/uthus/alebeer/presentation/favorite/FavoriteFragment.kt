@@ -1,4 +1,4 @@
-package com.uthus.alebeer.presentation.beer
+package com.uthus.alebeer.presentation.favorite
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,30 +7,37 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.uthus.alebeer.AleBeerApplication
-import com.uthus.alebeer.MainActivity
 import com.uthus.alebeer.R
 import com.uthus.alebeer.data.model.BeerModel
-import com.uthus.alebeer.databinding.FragmentBeerBinding
+import com.uthus.alebeer.databinding.FragmentFavoriteBinding
 import com.uthus.alebeer.presentation.adapter.binder.BeerBinder
+import com.uthus.alebeer.presentation.adapter.binder.FavoriteBinder
 import com.uthus.alebeer.presentation.adapter.binder.OnButtonClickedListener
-import com.uthus.alebeer.util.BeerViewModelFactory
+import com.uthus.alebeer.util.Action
+import com.uthus.alebeer.util.EventBus
+import com.uthus.alebeer.util.FavoriteViewModelFactory
 import com.uthus.alebeer.util.ToastExt
 import com.uthus.alebeer.util.statemanagement.ResultState
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import mva2.adapter.ListSection
 import mva2.adapter.MultiViewAdapter
 
-class BeerFragment : Fragment() {
+class FavoriteFragment : Fragment() {
 
-    private var _binding: FragmentBeerBinding? = null
+    private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private val application by lazy {
         activity?.application as AleBeerApplication
     }
-    private val viewModel: BeerViewModel by viewModels {
-        BeerViewModelFactory(
-            application.getBeersUseCase,
-            application.saveFavoriteUseCase
+    private val viewModel: FavoriteViewModel by viewModels {
+        FavoriteViewModelFactory(
+            application.getLocalBeersUseCase,
+            application.deleteFavoriteBeerUseCase,
+            application.updateFavoriteBeerUseCase
         )
     }
 
@@ -41,23 +48,8 @@ class BeerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBeerBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setupAdapter()
-        getBeers()
-        setupObserver()
-        setupPullToRefresh()
-    }
-
-    private fun setupPullToRefresh() = with(_binding) {
-        this?.swipeRefreshLayout?.setOnRefreshListener {
-            getBeers()
-            swipeRefreshLayout.isRefreshing = false
-        }
-
     }
 
     override fun onResume() {
@@ -65,43 +57,79 @@ class BeerFragment : Fragment() {
         _binding?.root?.requestLayout()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupAdapter()
+        getBeers()
+        setupObserver()
+        subscribeOnInsert()
+    }
+
+    private fun subscribeOnInsert() {
+        lifecycleScope.launchWhenStarted {
+            EventBus.events.filter { action -> action == Action.SAVE }.collectLatest {
+                getBeers()
+            }
+        }
+    }
+
     private fun getBeers() {
-        viewModel.getBeers()
+        viewModel.getLocalBeers()
     }
 
     private fun setupObserver() = with(viewModel) {
-        listBeerModel.observe(viewLifecycleOwner) { resultState ->
+        listBeers.observe(viewLifecycleOwner) { resultState ->
             when (resultState) {
                 is ResultState.Success -> {
                     _binding?.progressCircular?.visibility = View.GONE
+
                     //Add data to adapter
                     addAdapterSection(resultState.data)
+
                 }
                 is ResultState.Error -> {
-                    ToastExt.showToast(requireContext(), R.string.error)
+                    //TODO: Handle error case here
                 }
                 is ResultState.Loading -> {
                     _binding?.progressCircular?.visibility = View.VISIBLE
                 }
             }
         }
-        onSaveFavorite.observe(viewLifecycleOwner) { resultState ->
-            when (resultState) {
+
+        onDeleteBeer.observe(viewLifecycleOwner) { resultState ->
+            when(resultState) {
                 is ResultState.Success -> {
-                    if (resultState.data != null && resultState.data > 0) {
-                        Toast.makeText(requireContext(), R.string.saved, Toast.LENGTH_SHORT).show()
-                        listSection[currentSavingPosition].isSaved = true
-                        adapter.notifyItemChanged(currentSavingPosition)
-                        viewModel.publishOnInsert()
+                    if(resultState.data != null && resultState.data > 0) {
+                        listSection.remove(currentDeletePos)
+                        adapter.notifyItemRemoved(currentDeletePos)
+                        ToastExt.showToast(requireContext(), R.string.deleted)
+
                     } else {
                         ToastExt.showToast(requireContext(), R.string.error)
+
                     }
                 }
                 is ResultState.Error -> {
                     ToastExt.showToast(requireContext(), R.string.error)
-                }
-                is ResultState.Loading -> {
 
+                }
+            }
+        }
+
+        onUpdateBeer.observe(viewLifecycleOwner) { resultState ->
+            when(resultState) {
+                is ResultState.Success -> {
+                    if(resultState.data != null && resultState.data > 0) {
+                        listSection[currentUpdatePos].note = noteChanged
+                        adapter.notifyItemChanged(currentUpdatePos)
+                        ToastExt.showToast(requireContext(), R.string.updated)
+
+                    } else {
+                        ToastExt.showToast(requireContext(), R.string.error)
+
+                    }
+                }
+                is ResultState.Error -> {
+                    ToastExt.showToast(requireContext(), R.string.error)
                 }
             }
         }
@@ -117,20 +145,17 @@ class BeerFragment : Fragment() {
     private fun setupAdapter() {
         adapter = MultiViewAdapter()
         _binding?.rvBeer?.adapter = adapter
-        adapter.registerItemBinders(BeerBinder(buttonClickedListener = object :
+        adapter.registerItemBinders(FavoriteBinder(onButtonClickedListener = object :
             OnButtonClickedListener {
             override fun onButtonSaveClick(position: Int, beerModel: BeerModel) {
-                viewModel.saveFavorite(beerModel.also {
-                    it.isSaved = true
-                }, position)
             }
 
             override fun onButtonDeleteClick(position: Int, beerModel: BeerModel) {
-                //Do Nothing
+                viewModel.deleteFavoriteBeer(beerModel.id, position)
             }
 
             override fun onButtonUpdateClicked(position: Int, beerModel: BeerModel) {
-                //Do Nothing
+                viewModel.updateFavoriteBeer(beerModel.note.orEmpty(), beerModel.id, position)
             }
         }))
     }
@@ -140,4 +165,6 @@ class BeerFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }

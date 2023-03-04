@@ -21,7 +21,9 @@ data class BeerEntity(
     @ColumnInfo(name = "sale_off_time")
     val saleOffTime: Long,
     @ColumnInfo(name = "note")
-    val note: String
+    val note: String,
+    @ColumnInfo(name = "isSaved")
+    val isSaved: Boolean
 )
 @Entity(tableName = "rating_table")
 data class RatingEntity(

@@ -1,12 +1,11 @@
 package com.uthus.alebeer.presentation.adapter
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.uthus.alebeer.presentation.beer.BeerFragment
-import com.uthus.alebeer.presentation.beer.FavoriteFragment
+import com.uthus.alebeer.presentation.favorite.FavoriteFragment
 
 const val ARG_OBJECT = "object"
 

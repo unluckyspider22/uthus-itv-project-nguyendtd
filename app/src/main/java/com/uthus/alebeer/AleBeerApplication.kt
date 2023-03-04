@@ -2,11 +2,9 @@ package com.uthus.alebeer
 
 import android.app.Application
 import com.uthus.alebeer.data.datasource.local.AleBeerLocalDataSourceImpl
-import com.uthus.alebeer.data.datasource.remote.AleBeerRemoteDataSource
 import com.uthus.alebeer.data.datasource.remote.AleBeerRemoteDataSourceImpl
 import com.uthus.alebeer.data.repository.AleBeerRepositoryImpl
-import com.uthus.alebeer.domain.usecase.GetBeersUseCaseImpl
-import com.uthus.alebeer.domain.usecase.SaveFavoriteUseCaseImpl
+import com.uthus.alebeer.domain.usecase.*
 import com.uthus.alebeer.util.localdb.BeerRoomDatabase
 
 class AleBeerApplication : Application() {
@@ -20,5 +18,9 @@ class AleBeerApplication : Application() {
         )
     }
     val getBeersUseCase by lazy { GetBeersUseCaseImpl(aleBeerRepository) }
+    val getLocalBeersUseCase by lazy { GetLocalBeersUseCaseImpl(aleBeerRepository) }
     val saveFavoriteUseCase by lazy { SaveFavoriteUseCaseImpl(aleBeerRepository) }
+    val deleteFavoriteBeerUseCase by lazy { DeleteFavoriteBeerUseCaseImpl(aleBeerRepository) }
+    val updateFavoriteBeerUseCase by lazy { UpdateFavoriteBeerUseCaseImpl(aleBeerRepository) }
+
 }
