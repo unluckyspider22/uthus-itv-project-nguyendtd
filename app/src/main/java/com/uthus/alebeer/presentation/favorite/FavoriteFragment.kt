@@ -87,7 +87,7 @@ class FavoriteFragment : Fragment() {
 
                 }
                 is ResultState.Error -> {
-                    //TODO: Handle error case here
+                    ToastExt.showToast(requireContext(),R.string.error)
                 }
                 is ResultState.Loading -> {
                     _binding?.progressCircular?.visibility = View.VISIBLE
