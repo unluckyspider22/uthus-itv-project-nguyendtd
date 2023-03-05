@@ -22,8 +22,8 @@ class FavoriteBinder(private val onButtonClickedListener: OnButtonClickedListene
             with(binding) {
                 tvName.text = beerModel?.name
                 tvPrice.text = beerModel?.price
-                Glide.with(context)
-                    .load(beerModel?.image)
+                Glide.with(context).load(beerModel?.image).error(R.drawable.beer_default_img)
+                    .placeholder(R.drawable.beer_default_img)
                     .into(ivBeer)
                 etNote.setText(beerModel.note)
                 btnUpdate.setOnClickListener {

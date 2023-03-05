@@ -13,5 +13,6 @@
     <string name="error">Error! PLease try again!</string>
     <string name="can_not_edit">Saved! Can not edit!</string>
     <string name="please_edit">Please type note!</string>
-
+    <string name="sale_off_in">Sale off in: </string>
+    <string name="sale_off">Sale off</string>
 </resources>

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.uthus.alebeer.AleBeerApplication
-import com.uthus.alebeer.MainActivity
 import com.uthus.alebeer.R
 import com.uthus.alebeer.data.model.BeerModel
 import com.uthus.alebeer.databinding.FragmentBeerBinding
